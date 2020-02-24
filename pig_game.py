@@ -1,60 +1,73 @@
 import random
+import time
 
 class Game:
     def __init__(self):
-        self.player = Player("Player")
+        self.player = Player("Asel")
         self.dealer = Dealer("Computer")
         self.die = Die()
     
     def game_start(self):
-        print("Enter any number to choose first player ")
+        print("Are you ready to play.. Enter any number to choose first player")
         userOneInput = int(input(">>>"))
         if userOneInput % 2 == 0:
-            # print("Player 1 starts the game")
-            self.player.round()
-        else: 
-            self.dealer.round()
+            player1 = self.player.round()
+    
+        if userOneInput % 2 != 0:
+            player2 = self.dealer.round()
+           
 
     
 
 class Die:
     def __init__(self):
-        self.die = random.randint(1,6)
-    def __str__(self):
-        return f"{self.die}"
+        self.dies = 6
+
+    def roll(self):
+        roll = random.randint(1,self.dies)
+        return roll
 
 class Player:
     def __init__(self, name):
         self.name = name
         self.round_score = 0
         self.game_score = 0
-        self.dealer = Dealer("Player")
+        
+        
     
     def __str__(self):
         return f"{self.name}"
 
     def round(self):
+        time.sleep(0.5)
         print(f'Your turn {self.name}')
         play_again = 'r'
-        round_score = 0
+        self.round_score = 0
         while play_again == 'r':
-            die = random.randint(1,6)
-            print('You rolled ',die)
-            if die == 1:
-                self.round_score= 0
-                self.game_score = 0
-                print('The other player takes their turn.')
-                print('Press Enter to continue')
-                # self.dealer.round()
-            elif self.game_score < 100:
-                self.round_score +=  die
-                self.game_score += self.round_score
-                print('Your score this turn is ',self.round_score)
-                print('Your totoal score is ',self.game_score)
+            
+            roll = game.die.roll()
+            print(f'{self.name} rolled', roll)
+            if self.game_score < 100 and roll != 1:
+                self.round_score +=  roll
+                print(f'{self.name} round score is ',self.round_score)
                 play_again = input("Whould you like to (r)oll or (h)old")
+    
+
+            if roll == 1:
+                self.round_score = 0
+                self.game_score += self.round_score
+                print(f'{self.name} score is {self.round_score}, game score is {self.game_score}               The Computer takes turn.')
+                game.dealer.round()
+            
             if self.game_score >= 100:
                 print('YOU WON. Your totoal score is ',self.game_score )
                 break
+        else: 
+            self.game_score += self.round_score
+            print(f'{self.name} game score is {self.game_score}')
+            game.dealer.round()
+        
+            
 
     
 
@@ -63,36 +76,37 @@ class Dealer:
         self.name = name
         self.round_score = 0
         self.game_score = 0
-        # self.player = Player("Player")
+        
+       
     
     def __str__(self):
         return f"{self.name}"
 
     def round(self):
-        print(f'Your turn {self.name}')
-        play_again = 'r'
-        round_score = 0
-        while play_again == 'r':
-            die = random.randint(1,6)
-            print('You rolled ',die)
-            if die == 1:
-                self.round_score= 0
-                self.game_score = 0
-                print('The other player takes their turn.')
-                print('Press Enter to continue')
-                # self.player.round()
-            else:
-                self.round_score +=  die
+        print(f'It is {self.name} turn now')
+        time.sleep(0.7)
+        self.round_score = 0
+        while self.round_score < 20 and self.game_score < 100:
+            roll = game.die.roll()
+            print(f'{self.name} rolled ',roll)
+            self.round_score +=  roll
+            print('Computer round score is ',self.round_score)
+            if roll == 1:
+                self.round_score = 0
                 self.game_score += self.round_score
-                print('Your score this turn is ',self.round_score)
-                print('Your totoal score is ',self.game_score)
-                play_again = input("Whould you like to (r)oll or (h)old")
+                print(f'{self.name} score is {self.round_score}, game score is {self.game_score}               The Computer takes their turn.')
+                game.player.round()
+            
             if self.game_score >= 100:
-                return self.game_score
+                print('Computer WON. Your totoal score is ',self.game_score )
                 break
 
+            if self.round_score >= 20:
+                self.game_score += self.round_score
+                print('Computer game score is ',self.game_score)
+                game.player.round()
+            
+            
         
-
-
 game = Game()
 game.game_start()
