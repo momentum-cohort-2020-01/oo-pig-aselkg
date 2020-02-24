@@ -86,7 +86,7 @@ class Dealer:
         print(f'It is {self.name} turn now')
         time.sleep(0.7)
         self.round_score = 0
-        while self.round_score < 20 and self.game_score < 100:
+        while self.round_score < 20:
             roll = game.die.roll()
             print(f'{self.name} rolled ',roll)
             self.round_score +=  roll
@@ -94,18 +94,22 @@ class Dealer:
             if roll == 1:
                 self.round_score = 0
                 self.game_score += self.round_score
-                print(f'{self.name} score is {self.round_score}, game score is {self.game_score}               The Computer takes their turn.')
+                print(f'{self.name} score is {self.round_score}, game score is {self.game_score}               The Player takes their turn.')
                 game.player.round()
-            
-            if self.game_score >= 100:
-                print('Computer WON. Your totoal score is ',self.game_score )
-                break
 
+        
             if self.round_score >= 20:
                 self.game_score += self.round_score
+                if self.game_score >= 100:
+                    print('Computer WON. Your totoal score is ',self.game_score )
+                    break
                 print('Computer game score is ',self.game_score)
                 game.player.round()
+
             
+
+            
+        
             
         
 game = Game()
